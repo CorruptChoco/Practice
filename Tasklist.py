@@ -1,4 +1,4 @@
-#version 1
+#version 1.1
 
 import tkinter as tk
 from tkinter import messagebox
@@ -21,6 +21,7 @@ def remove_task():
 # Create the main window
 root = tk.Tk()
 root.title("To-Do List App")
+root.geometry ("600x400")
 
 # Create and pack GUI elements
 entry = tk.Entry(root, width=30)
@@ -30,10 +31,10 @@ add_button = tk.Button(root, text="Add Task", command=add_task)
 add_button.pack(pady=5)
 
 remove_button = tk.Button(root, text="Remove Task", command=remove_task)
-remove_button.pack(pady=5)
+remove_button.pack(pady=5, side='bottom')
 
-listbox = tk.Listbox(root, selectmode=tk.SINGLE, width=40, height=10)
-listbox.pack(pady=10)
+listbox = tk.Listbox(root, selectmode=tk.SINGLE, width=80, height=50)
+listbox.pack(pady=10, expand= True)
 
 # Start the main event loop
 root.mainloop()
