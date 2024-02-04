@@ -8,6 +8,7 @@ def add_task():
     if task:
         listbox.insert(tk.END, task)
         entry.delete(0, tk.END)
+        save_tasks_to_file()
     else:
         messagebox.showwarning("Warning", "Please enter a task!")
 
@@ -15,6 +16,7 @@ def remove_task():
     selected_task = listbox.curselection()
     if selected_task:
         listbox.delete(selected_task)
+        save_tasks_to_file()
     else:
         messagebox.showwarning("Warning", "Please select a task to remove!")
 
@@ -26,8 +28,29 @@ def edit_task():
         if edited_task is not None:
             listbox.delete(selected_task_index)
             listbox.insert(selected_task_index, edited_task)
+            save_tasks_to_file()
     else:
         messagebox.showwarning("Warning", "Please select a task to edit!")
+
+def save_tasks_to_file():
+    with open("task_list.txt", "w") as file:
+        tasks = listbox.get(0, tk.END)
+        for task in tasks:
+            file.write(task + '\n')
+
+def load_tasks_from_file():
+    try:
+        with open('task_list.txt', "r") as file:
+            tasks = [line.strip() for line in file.readlines()]
+            # non list comprehension version for comparison of above line
+            # tasks = []
+            # for line in file.readlines():
+            #     tasks.append(line.strip())
+            listbox.delete(0, tk.END)  # Clear existing tasks in the Listbox
+            for task in tasks:
+                listbox.insert(tk.END, task)
+    except FileNotFoundError:
+        pass  # Ignore if the file is not found (no tasks saved yet)
 
 # Create the main window
 root = tk.Tk()
@@ -49,6 +72,9 @@ edit_button.pack(pady=5, side = 'bottom')
 
 listbox = tk.Listbox(root, selectmode=tk.SINGLE, width=80, height=50)
 listbox.pack(pady=10, expand= True)
+
+# Call load_tasks_from_file at the beginning
+load_tasks_from_file()
 
 # Start the main event loop
 root.mainloop()
