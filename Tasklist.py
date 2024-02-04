@@ -1,7 +1,7 @@
-#version 1.1
+#version 1.2
 
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import simpledialog, messagebox
 
 def add_task():
     task = entry.get()
@@ -18,6 +18,17 @@ def remove_task():
     else:
         messagebox.showwarning("Warning", "Please select a task to remove!")
 
+def edit_task():
+    selected_task_index = listbox.curselection()
+    if selected_task_index:
+        selected_task = listbox.get(selected_task_index)
+        edited_task = simpledialog.askstring("Edit Task","Edit Task", initialvalue=selected_task)
+        if edited_task is not None:
+            listbox.delete(selected_task_index)
+            listbox.insert(selected_task_index, edited_task)
+    else:
+        messagebox.showwarning("Warning", "Please select a task to edit!")
+
 # Create the main window
 root = tk.Tk()
 root.title("To-Do List App")
@@ -32,6 +43,9 @@ add_button.pack(pady=5)
 
 remove_button = tk.Button(root, text="Remove Task", command=remove_task)
 remove_button.pack(pady=5, side='bottom')
+
+edit_button = tk.Button(root, text= 'Edit Task', command=edit_task)
+edit_button.pack(pady=5, side = 'bottom')
 
 listbox = tk.Listbox(root, selectmode=tk.SINGLE, width=80, height=50)
 listbox.pack(pady=10, expand= True)
