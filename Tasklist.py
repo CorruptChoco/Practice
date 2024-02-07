@@ -1,4 +1,4 @@
-#version 1.2
+#version 1.3
 
 import tkinter as tk
 from tkinter import simpledialog, messagebox
@@ -6,7 +6,8 @@ from tkinter import simpledialog, messagebox
 def add_task():
     task = entry.get()
     if task:
-        listbox.insert(tk.END, task)
+        index = len(listbox.get(0,tk.END))
+        listbox.insert(tk.END, str((index + 1)) + ") " + task)
         entry.delete(0, tk.END)
         save_tasks_to_file()
     else:
@@ -16,6 +17,7 @@ def remove_task():
     selected_task = listbox.curselection()
     if selected_task:
         listbox.delete(selected_task)
+        index_tasks()
         save_tasks_to_file()
     else:
         messagebox.showwarning("Warning", "Please select a task to remove!")
@@ -31,6 +33,16 @@ def edit_task():
             save_tasks_to_file()
     else:
         messagebox.showwarning("Warning", "Please select a task to edit!")
+
+def index_tasks():
+    tasks = listbox.get(0, tk.END)
+    listbox.delete(0, tk.END)
+    for i, task in enumerate(tasks):
+        blank_space = task.find(' ')
+        task = task[blank_space+1:]
+        task = str(i+1) + ") " + task
+        listbox.insert(tk.END, task)
+
 
 def save_tasks_to_file():
     with open("task_list.txt", "w") as file:
