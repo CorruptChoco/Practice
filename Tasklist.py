@@ -1,18 +1,23 @@
-#version 1.3
+#version 1.5
 
+# import modules
 import tkinter as tk
 from tkinter import simpledialog, messagebox
 
+# establish constants
+TASK_FILE = "task_list.txt"
+
+# Function to add a new task to the list
 def add_task():
     task = entry.get()
     if task:
-        index = len(listbox.get(0,tk.END))
-        listbox.insert(tk.END, str((index + 1)) + ") " + task)
+        listbox.insert(tk.END, f"{listbox.size() + 1}) {task}")
         entry.delete(0, tk.END)
         save_tasks_to_file()
     else:
         messagebox.showwarning("Warning", "Please enter a task!")
 
+# Function to remove a selected task from the list
 def remove_task():
     selected_task = listbox.curselection()
     if selected_task:
@@ -22,6 +27,7 @@ def remove_task():
     else:
         messagebox.showwarning("Warning", "Please select a task to remove!")
 
+# Function to edit a selected task in the list
 def edit_task():
     selected_task_index = listbox.curselection()
     if selected_task_index:
@@ -34,22 +40,27 @@ def edit_task():
     else:
         messagebox.showwarning("Warning", "Please select a task to edit!")
 
+# Function to update the indices of tasks in the list
 def index_tasks():
     tasks = listbox.get(0, tk.END)
     listbox.delete(0, tk.END)
     for i, task in enumerate(tasks):
-        blank_space = task.find(' ')
-        task = task[blank_space+1:]
-        task = str(i+1) + ") " + task
-        listbox.insert(tk.END, task)
+        # Insert each task with its index, starting from 1. split takes the string and splits it into 2 strings starting at the 
+        # first " ". the [1] refers to the second item in that new list of strings.
+        listbox.insert(tk.END, f"{i + 1}) {task.split(' ', 1)[1]}")
+        # blank_space = task.find(' ')
+        # task = task[blank_space+1:]
+        # task = str(i+1) + ") " + task
+        # listbox.insert(tk.END, task)
 
-
+# Function to save tasks to the file
 def save_tasks_to_file():
-    with open("task_list.txt", "w") as file:
+    with open(TASK_FILE, "w") as file:
         tasks = listbox.get(0, tk.END)
         for task in tasks:
             file.write(task + '\n')
 
+# Function to load tasks from the file
 def load_tasks_from_file():
     try:
         with open('task_list.txt', "r") as file:

@@ -1,4 +1,4 @@
-1) get milk
-2) do dishes
-3) eat food
-4) repair item
+1) eat all food
+2) repair item
+3) pack bags
+4) do dishes
